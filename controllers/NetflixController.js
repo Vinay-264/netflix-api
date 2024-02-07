@@ -18,8 +18,12 @@ module.exports.getGenres = async (req, res) => {
 
 module.exports.getTrendingMovies = async (req, res) => {
   try {
+    const { category,time_window }= req.params;
     // Make a GET request to a third-party API
-    const response = await axios.get(`https://api.themoviedb.org/3/trending/movie/day`,
+    //http://localhost:5000/api/trendingMovies/all/day
+    //TRENDING CATEGORY - ALL, MOVIES, TV, PEOPLE
+    // TRENDING time_window - day(default), week
+    const response = await axios.get(`https://api.themoviedb.org/3/trending/${category}/${time_window}`,
     {
       params: {
         api_key: API_KEY,
@@ -27,7 +31,7 @@ module.exports.getTrendingMovies = async (req, res) => {
     });
         
     // Extract data from the response
-    const apiData = response.data;
+    const apiData = response.data.results;
 
     // Send the data as the API response
     res.json(apiData);
@@ -46,7 +50,7 @@ module.exports.getPopularMovies = async(req,res) => {
     });
 
    // Extract data from the response
-   const apiData = response.data;
+   const apiData = response.data.results;
 
    // Send the data as the API response
    res.json(apiData);
