@@ -11,7 +11,7 @@ const {
 
   router.get("/genres", getGenres);
 
-  router.get("/trendingMovies", getTrendingMovies);
+  router.get("/trendingMovies/:category/:time_window", getTrendingMovies);
 
   router.get("/popularMovies", getPopularMovies);
 
