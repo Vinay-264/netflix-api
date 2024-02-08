@@ -73,6 +73,26 @@ module.exports.getPopularMovies = async(req,res) => {
 //   }
 // );
 
+module.exports.searchMovies = async(req,res) => {
+
+  try {
+    const keyword = req.query;
+    const response = await axios.get(`${TMDB_BASE_URL}/search/keyword?query=${keyword}`, {
+      params: {
+        api_key: API_KEY,
+      },
+    });
+
+   // Extract data from the response
+   const movies = response.data.results;
+
+   // Send the data as the API response
+   res.json(movies);
+ } catch (error) {
+   return res.json({ msg: "Error searching movies." });
+ }
+  
+}
 
   const getRawData = async (api, genres, paging = false) => {
     const moviesArray = [];
