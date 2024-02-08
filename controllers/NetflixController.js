@@ -20,15 +20,10 @@ module.exports.getTrendingMovies = async (req, res) => {
   try {
     const { category,time_window }= req.params;
     // Make a GET request to a third-party API
-    //http://localhost:5000/api/trendingMovies/all/day
+    //http://localhost:5000/api/trending/all/day
     //TRENDING CATEGORY - ALL, MOVIES, TV, PEOPLE
     // TRENDING time_window - day(default), week
-    const response = await axios.get(`https://api.themoviedb.org/3/trending/${category}/${time_window}`,
-    {
-      params: {
-        api_key: API_KEY,
-      },
-    });
+    const response = await axios.get(`${TMDB_BASE_URL}/trending/${category}/${time_window}?api_key=${API_KEY}`);
         
     // Extract data from the response
     const apiData = response.data.results;
@@ -43,11 +38,7 @@ module.exports.getTrendingMovies = async (req, res) => {
 module.exports.getPopularMovies = async(req,res) => {
 
   try {
-    const response = await axios.get(`${TMDB_BASE_URL}/movie/popular`, {
-      params: {
-        api_key: API_KEY,
-      },
-    });
+    const response = await axios.get(`${TMDB_BASE_URL}/movie/popular?api_key=${API_KEY}`);
 
    // Extract data from the response
    const apiData = response.data.results;
@@ -59,19 +50,26 @@ module.exports.getPopularMovies = async(req,res) => {
  }
   
 }
-// module.exports.getTrendingMovies = createAsyncThunk(
-//   "netflix/trending",
-//   async ({ type }, thunkAPI) => {
-//     const {
-//       netflix: { genres },
-//     } = thunkAPI.getState();
-//     return getRawData(
-//       `${TMDB_BASE_URL}/trending/${type}/week?api_key=${API_KEY}`,
-//       genres,
-//       true
-//     );
-//   }
-// );
+
+module.exports.fetchDataByGenre = async (req, res) => {
+  try {
+    const { type }= req.params;
+    const { genre }= req.query;
+    // Make a GET request to a third-party API
+    //http://localhost:5000/api/netflix/genre/movie?genre=18
+    //type - MOVIE, TV
+    // genre - 18
+    const response = await axios.get(`${TMDB_BASE_URL}/discover/${type}?api_key=${API_KEY}&include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&with_genres=${genre}`);
+        
+    // Extract data from the response
+    const apiData = response.data.results;
+
+    // Send the data as the API response
+    res.json(apiData);
+  } catch (error) {
+    return res.json({ msg: "Error fetching movie/tv having genre." });
+  }
+}
 
 module.exports.searchMovies = async(req,res) => {
 
@@ -91,7 +89,6 @@ module.exports.searchMovies = async(req,res) => {
  } catch (error) {
    return res.json({ msg: "Error searching movies." });
  }
-  
 }
 
   const getRawData = async (api, genres, paging = false) => {

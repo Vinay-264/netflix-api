@@ -1,19 +1,21 @@
 const {
-    getGenres, getTrendingMovies, getPopularMovies, searchMovies
+    getGenres, getTrendingMovies, getPopularMovies, fetchDataByGenre, searchMovies
   } = require("../controllers/NetflixController");
 
   
   const router = require("express").Router();
   router.get("/", (req, res) => {
-    console.log("default api call");
+    console.log("Welcome to Netflix Api...");
     res.status(200).json({msg:"default api call"});
   });
 
   router.get("/genres", getGenres);
 
-  router.get("/trendingMovies/:category/:time_window", getTrendingMovies);
+  router.get("/trending/:category/:time_window", getTrendingMovies);
 
-  router.get("/popularMovies", getPopularMovies);
+  router.get("/popular", getPopularMovies);
+
+  router.get("/genre/:type", fetchDataByGenre);
 
   router.get("/search", searchMovies);
 
