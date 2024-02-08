@@ -6,7 +6,7 @@ const {
   const router = require("express").Router();
   router.get("/", (req, res) => {
     console.log("Welcome to Netflix Api...");
-    res.status(200).json({msg:"default api call"});
+    res.status(200).json({msg:"Welcome to Netflix Api..."});
   });
 
   router.get("/genres", getGenres);
