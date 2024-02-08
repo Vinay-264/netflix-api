@@ -9,7 +9,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cors());
 
 
-app.use("/api", userRoutes);
+app.use("/api/netflix", userRoutes);
 app.listen(5000, () => {
   console.log("server started on port 5000");
 });
