@@ -1,5 +1,5 @@
 const {
-    getGenres, getTrendingMovies, getPopularMovies, fetchDataByGenre
+    getGenres, getTrendingMovies, getPopularMovies, fetchDataByGenre, searchMovieorTVShows
   } = require("../controllers/NetflixController");
 
   
@@ -17,6 +17,7 @@ const {
 
   router.get("/genre/:type", fetchDataByGenre);
 
+  router.get("/search", searchMovieorTVShows);
   //router.get("/liked/:email", getLikedMovies);
 //   router.post("/add", addToLikedMovies);
 //   router.put("/remove", removeFromLikedMovies);
