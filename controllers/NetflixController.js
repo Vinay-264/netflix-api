@@ -1,4 +1,11 @@
-const axios = require('axios'); // Import Axios library
+//const axios = require('axios'); // Import Axios library
+const https = require('https');
+const axios = require('axios').create({
+  //keepAlive pools and reuses TCP connections, so it's faster
+  //httpAgent: new http.Agent({ keepAlive: true }),
+  httpsAgent: new https.Agent({ keepAlive: false }),
+});
+
 const { API_KEY, TMDB_BASE_URL } = require('../utils/constants');
 
 module.exports.getGenres = async (req, res) => {
@@ -72,21 +79,22 @@ module.exports.fetchDataByGenre = async (req, res) => {
   }
 }
 
-module.exports.searchMovies = async(req,res) => {
+module.exports.searchMovieorTVShows = async(req,res) => {
 
   try {
-    const keyword = req.query;
-    const response = await axios.get(`${TMDB_BASE_URL}/search/keyword?query=${keyword}`, {
-      params: {
-        api_key: API_KEY,
-      },
-    });
-
+    const {key} = req.query;
+    
+    //API to Search for movies or TV shows based on keywords
+    const response = await axios.get(`${TMDB_BASE_URL}/search/multi?api_key=${API_KEY}&query=${encodeURIComponent(key)}&include_adult=false`);
+    
    // Extract data from the response
-   const movies = response.data.results;
-
-   // Send the data as the API response
-   res.json(movies);
+   if(response.data.results.length > 0) {
+    const movies = response.data.results;
+    // Send the data as the API response
+    res.json(movies);
+   } else {
+    throw new Error('No movies found');
+   }
  } catch (error) {
    return res.json({ msg: "Error searching movies." });
  }
