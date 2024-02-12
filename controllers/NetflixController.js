@@ -98,3 +98,39 @@ module.exports.fetchDataByGenre = async (req, res) => {
         });
     });
   };
+
+
+
+  module.exports.getMovieById = async (req, res) => {
+    try {
+      const { movie_id }= req.params;
+      // Make a GET request to a third-party API
+      //http://localhost:5000/api/netflix/movie/157336
+      const response = await axios.get(`${TMDB_BASE_URL}/movie/${movie_id}?api_key=${API_KEY}`);
+          
+      // Extract data from the response
+      const apiData = response.data;
+  
+      // Send the data as the API response
+      res.json(apiData);
+    } catch (error) {
+      return res.json({ msg: "Error fetching movie." });
+    }
+  };
+
+  module.exports.getShowById = async (req, res) => {
+    try {
+      const { series_id }= req.params;
+      // Make a GET request to a third-party API
+      //http://localhost:5000/api/netflix/tvshow/1396
+      const response = await axios.get(`${TMDB_BASE_URL}/tv/${series_id}?api_key=${API_KEY}&language=en-US`);
+          
+      // Extract data from the response
+      const apiData = response.data;
+  
+      // Send the data as the API response
+      res.json(apiData);
+    } catch (error) {
+      return res.json({ msg: "Error fetching tv show." });
+    }
+  };
