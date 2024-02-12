@@ -18,29 +18,35 @@ module.exports.getLikedMovies = async (req, res) => {
 
 module.exports.addToLikedMovies = async (req, res) => {
   try {
-    const { email, data } = req.body;
-    const user =  await User.findOne({ email });
-     // If user Exists
-    if (user) {
-      const { likedMovies } = user;
-      const movieAlreadyLiked = likedMovies?.find(({ id }) => id === data.id);
-      if (!movieAlreadyLiked) {
-        await User.findByIdAndUpdate(user._id, { likedMovies: [...user.likedMovies, data], },{ new: true });
-      } else if (movieAlreadyLiked) {
-        return res.json({ msg: "Movie already added to the liked list." });
-      }
-      else {
-        await User.findByIdAndInsert(user._id, { likedMovies: [ data], },{ new: true });
+        const { email, data } = req.body;
+        // Check if email exists in the database
+        const existingMovie = await User.findOne({ email });
 
-      }
-      
-    } else { //If user not Exists create User
-        await User.create({ email, likedMovies: [data] });
-    } 
-    return res.json({ msg: "Movie successfully added to liked list." });
+        if (existingMovie) {
+            // If email exists, append likedMovies
+            const { likedMovies } = existingMovie;
+            const movieAlreadyLiked = likedMovies.find(({ id }) => id === data.id);
+            if (!movieAlreadyLiked) {
+              await User.findByIdAndUpdate(
+                existingMovie._id,
+                {
+                  likedMovies: [...existingMovie.likedMovies, data],
+                },
+                { new: true }
+              );
+            } else {
+               await existingMovie.save();
+              return res.json({ msg: "Movie already added to the liked list." });
+            }            
+        } else {
+            // If email does not exist, create a new movie document
+            movie = await User.create({ email, data });
+            
+        }
+        return res.json({ msg: "Movie added to the liked list."});
+        
   } catch (error) {
-    console.log(error);
-    return res.json({ msg: "Error adding movie to the liked list" });
+    return res.status(500).json({ msg: "Error adding movie to the liked list" });
   }
 };
 
@@ -50,9 +56,9 @@ module.exports.removeFromLikedMovies = async (req, res) => {
     const user = await User.findOne({ email });
     if (user) {
       const movies = user.likedMovies;
-      const movieIndex = movies.findIndex(({ id }) => id === movieId);
-      if (!movieIndex) {
-        res.status(400).send({ msg: "Movie not found." });
+      const movieIndex = movies.findIndex(({ id }) => id === Number(movieId));
+      if (movieIndex) {
+        return res.status(400).send({ msg: "Movie not found." });
       }
       movies.splice(movieIndex, 1);
       await User.findByIdAndUpdate(

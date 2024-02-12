@@ -1,11 +1,5 @@
 const mongoose = require("mongoose");
 
-const likeMoviesSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
-  name: String,   
-  genres: Array,
-  image: String
-});
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -14,7 +8,12 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  likedMovies: [likeMoviesSchema],
+  likedMovies: [{
+    id: { type: Number, unique: true },
+    genres: [String],
+    image: String,
+    name: String
+  }]
 });
 
 module.exports = mongoose.model("users", userSchema);
