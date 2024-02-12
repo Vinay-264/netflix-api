@@ -20,6 +20,8 @@ module.exports.addToLikedMovies = async (req, res) => {
   try {
         const { email, data } = req.body;
         // Check if email exists in the database
+        // {"email": "xyz8998@gmail.com","data": {"id": 2,"genres":["comedy"],
+        //"image":"./background.jpg","name":"pankaj"}}
         const existingMovie = await User.findOne({ email });
 
         if (existingMovie) {
