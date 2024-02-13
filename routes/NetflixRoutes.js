@@ -2,7 +2,7 @@ const {
     getGenres, getTrendingMovies, getPopularMovies, fetchDataByGenre, searchMovieorTVShows, getMovieById, getShowById
   } = require("../controllers/NetflixController");
   
-  const verifyToken=require('../middlewares/verifyToken')
+  
   const authMiddleware=require('../middlewares/authMiddleware')
 
   
