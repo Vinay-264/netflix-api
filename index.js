@@ -5,6 +5,7 @@ const userRoutes = require("./routes/UserRoutes");
 const db = require("./utils/db");
 const dotenv = require('dotenv');
 dotenv.config({ path: `${__dirname}/config.env` });
+const authRoutes = require('./routes/AuthRoutes');
 
 const PORT = process.env.PORT || 5000;
 
@@ -18,6 +19,8 @@ db.dbConfig();
 
 app.use("/api/netflix", netflixRoutes);
 app.use("/api/user", userRoutes);
+app.use('/api/auth', authRoutes);
+
 
 app.listen(PORT, () => {
   console.log(`server started on port ${PORT}`);

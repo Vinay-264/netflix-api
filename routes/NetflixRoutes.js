@@ -1,6 +1,9 @@
 const {
     getGenres, getTrendingMovies, getPopularMovies, fetchDataByGenre, searchMovieorTVShows, getMovieById, getShowById
   } = require("../controllers/NetflixController");
+  
+  const verifyToken=require('../middlewares/verifyToken')
+  const authMiddleware=require('../middlewares/authMiddleware')
 
   
   const router = require("express").Router();
@@ -9,19 +12,20 @@ const {
     res.status(200).json({msg:"Welcome to Netflix Api..."});
   });
 
-  router.get("/genres", getGenres);
 
-  router.get("/trending/:category/:time_window", getTrendingMovies);
+  router.get("/genres",authMiddleware, getGenres);
 
-  router.get("/popular", getPopularMovies);
+  router.get("/trending/:category/:time_window",authMiddleware, getTrendingMovies);
 
-  router.get("/genre/:type", fetchDataByGenre);
+  router.get("/popular",authMiddleware, getPopularMovies);
 
-  router.get("/search", searchMovieorTVShows);
+  router.get("/genre/:type",authMiddleware, fetchDataByGenre);
 
-  router.get("/movie/:movie_id", getMovieById);
+  router.get("/search",authMiddleware, searchMovieorTVShows);
 
-  router.get("/tvshow/:series_id", getShowById);
+  router.get("/movie/:movie_id",authMiddleware, getMovieById);
+
+  router.get("/tvshow/:series_id",authMiddleware, getShowById);
   //router.get("/liked/:email", getLikedMovies);
 //   router.post("/add", addToLikedMovies);
 //   router.put("/remove", removeFromLikedMovies);
