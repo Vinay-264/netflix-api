@@ -13,20 +13,17 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-    const { email, password } = req.body;
-    
-    try {
-      const userId = await AuthModel.loginUser(email, password);
-      
-      // Generate custom token for the authenticated user
-      const customToken = await firebaseAdmin.auth().createCustomToken(userId);
+  const { email, password } = req.body;
   
-      // Return the custom token as part of the response
-      res.status(200).json({ message: 'Login successful', customToken });
-    } catch (error) {
-      res.status(400).send(error.message);
-    }
-  };
+  try {
+    const userId = await AuthModel.loginUser(email, password);
+    
+    // Return only the userId instead of generating a custom token
+    res.status(200).json({ message: 'Login successful', userId });
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
 
 module.exports = {
   register,
