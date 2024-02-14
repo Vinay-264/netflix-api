@@ -27,9 +27,9 @@ const {
 
   router.get("/tvshow/:series_id",authMiddleware, getShowById);
 
-  router.get("/movie/:movie_id/reviews", getMovieReviewsById);
+  router.get("/movie/:movie_id/reviews", authMiddleware, getMovieReviewsById);
 
-  router.get("/tvshow/:series_id/reviews", getShowReviewsById);
+  router.get("/tvshow/:series_id/reviews", authMiddleware, getShowReviewsById);
   //router.get("/liked/:email", getLikedMovies);
 //   router.post("/add", addToLikedMovies);
 //   router.put("/remove", removeFromLikedMovies);
