@@ -6,7 +6,7 @@ const axios = require('axios').create({
   httpsAgent: new https.Agent({ keepAlive: false }),
 });
 
-const { API_KEY, TMDB_BASE_URL } = require('../utils/constants');
+const { API_KEY, TMDB_BASE_URL, IMG_PATH_PREFIX } = require('../utils/constants');
 
 module.exports.getGenres = async (req, res) => {
     
@@ -30,9 +30,12 @@ module.exports.getGenres = async (req, res) => {
         
     // Extract data from the response
     const apiData = response.data.results;
-
+    const responseData = {
+      urlPrefix: IMG_PATH_PREFIX,
+      data: apiData
+    }
     // Send the data as the API response
-    res.json(apiData);
+    res.json(responseData);
  };
 
 
@@ -42,9 +45,12 @@ module.exports.getGenres = async (req, res) => {
 
     // Extract data from the response
     const apiData = response.data.results;
- 
+    const responseData = {
+      urlPrefix: IMG_PATH_PREFIX,
+      data: apiData
+    }
     // Send the data as the API response
-    res.json(apiData);
+    res.json(responseData);
  };
 
  module.exports.fetchDataByGenre = async (req, res) => {
@@ -59,9 +65,12 @@ module.exports.getGenres = async (req, res) => {
         
     // Extract data from the response
     const apiData = response.data.results;
-
+    const responseData = {
+      urlPrefix: IMG_PATH_PREFIX,
+      data: apiData
+    }
     // Send the data as the API response
-    res.json(apiData);
+    res.json(responseData);
  };
 
  module.exports.searchMovieorTVShows = async (req, res) => {
@@ -90,9 +99,12 @@ module.exports.getGenres = async (req, res) => {
         
     // Extract data from the response
     const apiData = response.data;
-
+    const responseData = {
+      urlPrefix: IMG_PATH_PREFIX,
+      data: apiData
+    }
     // Send the data as the API response
-    res.json(apiData);
+    res.json(responseData);
  };
 
 
@@ -104,9 +116,12 @@ module.exports.getGenres = async (req, res) => {
           
       // Extract data from the response
       const apiData = response.data;
-  
+      const responseData = {
+         urlPrefix: IMG_PATH_PREFIX,
+         data: apiData
+      }
       // Send the data as the API response
-      res.json(apiData);
+      res.json(responseData);
  };
 
  module.exports.getMovieReviewsById = async (req, res) => {
@@ -117,9 +132,12 @@ module.exports.getGenres = async (req, res) => {
         
     // Extract data from the response
     const apiData = response.data;
-
+    const responseData = {
+      urlPrefix: IMG_PATH_PREFIX,
+      data: apiData
+    }
     // Send the data as the API response
-    res.json(apiData);
+    res.json(responseData);
  };
 
  module.exports.getShowReviewsById = async (req, res) => {
@@ -130,9 +148,12 @@ module.exports.getGenres = async (req, res) => {
           
       // Extract data from the response
       const apiData = response.data;
-  
+      const responseData = {
+         urlPrefix: IMG_PATH_PREFIX,
+         data: apiData
+      }
       // Send the data as the API response
-      res.json(apiData);
+      res.json(responseData);
  };
 
 
