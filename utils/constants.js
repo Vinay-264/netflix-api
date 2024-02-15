@@ -5,6 +5,7 @@ module.exports = {
     DB_PASSWORD:'Changenew14092034',
     DB_NAME:'netflix',
     MAX_API_PER_TIME_FRAME: 100,
-    TIME_FRAME_PER_IP: 15 * 60 * 1000
+    TIME_FRAME_PER_IP: 15 * 60 * 1000,
+    IMG_PATH_PREFIX: 'https://image.tmdb.org/t/p/w500/'
 }
 
