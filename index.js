@@ -3,6 +3,7 @@ const cors = require("cors");
 const netflixRoutes = require("./routes/NetflixRoutes");
 const userRoutes = require("./routes/UserRoutes");
 const { limiter } = require("./services/RateLimit");
+const watchListRoutes = require("./routes/WatchListRoutes");
 const db = require("./utils/db");
 const dotenv = require('dotenv');
 dotenv.config({ path: `${__dirname}/config.env` });
@@ -24,6 +25,7 @@ app.use("/api/netflix", netflixRoutes);
 app.use("/api/user", userRoutes);
 app.use('/api/auth', authRoutes);
 
+app.use("/api/watchList", watchListRoutes);
 
 app.listen(PORT, () => {
   console.log(`server started on port ${PORT}`);
