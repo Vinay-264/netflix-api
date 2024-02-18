@@ -1,4 +1,4 @@
-const User = require("../models/UserModel");
+const User = require("../models/usermodel");
 const UserPref = require("../models/userpreferences");
 const https = require('https');
 const axios = require('axios').create({
