@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const status = require("express-status-monitor");
 const netflixRoutes = require("./routes/NetflixRoutes");
 const userRoutes = require("./routes/UserRoutes");
 const { limiter } = require("./services/RateLimit");
@@ -13,6 +14,7 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
  
+app.use(status());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 app.use(cors());
