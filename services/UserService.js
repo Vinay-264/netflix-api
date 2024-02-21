@@ -13,9 +13,9 @@ module.exports.fetchLikedMovies = async (req, res) => {
 
   const user = await User.findOne({ email });
   if (user) {
-    return res.json({ msg: "success", movies: user.likedMovies });
+    return res.status(200).json({ msg: "success", movies: user.likedMovies });
   } else {
-    return res.json({ msg: "User with given email not found." });
+    return res.status(400).json({ msg: "User with given email not found." });
   }
 };
 
@@ -40,13 +40,13 @@ module.exports.addToLikedMovies = async (req, res) => {
       );
     } else {
       await existingMovie.save();
-      return res.json({ msg: "Movie already added to the liked list." });
+      return res.status(200).json({ msg: "Movie already added to the liked list." });
     }
   } else {
     // If email does not exist, create a new movie document
     movie = await User.create({ email, data });
   }
-  return res.json({ msg: "Movie added to the liked list." });
+  return res.status(200).json({ msg: "Movie added to the liked list." });
 };
 
 module.exports.removedLikedMovies = async (req, res) => {
@@ -66,8 +66,8 @@ module.exports.removedLikedMovies = async (req, res) => {
       },
       { new: true }
     );
-    return res.json({ msg: "Movie successfully removed.", movies });
-  } else return res.json({ msg: "User with given email not found." });
+    return res.status(200).json({ msg: "Movie successfully removed.", movies });
+  } else return res.status(400).json({ msg: "User with given email not found." });
 };
 
 module.exports.getUserPreferences = async (req, res) => {
@@ -75,9 +75,9 @@ module.exports.getUserPreferences = async (req, res) => {
 
   const userPref = await UserPref.findOne({ email });
   if (userPref) {
-    return res.json({ msg: "success", genres: userPref.preferredGenres });
+    return res.status(200).json({ msg: "success", genres: userPref.preferredGenres });
   } else {
-    return res.json({ msg: "User with given email not found." });
+    return res.status(400).json({ msg: "User with given email not found." });
   }
 };
 
@@ -85,14 +85,14 @@ module.exports.saveUserPreferences = async (req, res) => {
   const userPrefData = req.body;
   const userPref = new UserPref(userPrefData);
   await userPref.save();  
-  return res.json({ msg: "Genre added to the preferred list." });
+  return res.status(200).json({ msg: "Genre added to the preferred list." });
 };
 
 module.exports.modifyUserPreferences = async (req, res) => {
   const email = req.params.email;
   const newPref = req.body.preferredGenres;
   await UserPref.findOneAndUpdate({ email }, { $set: { preferredGenres: newPref } }) 
-  return res.json({ msg: "Genre updated in the user preferred list." });
+  return res.status(200).json({ msg: "Genre updated in the user preferred list." });
 };
 
 module.exports.getRecommendedContent = async (req, res) => {
@@ -100,6 +100,7 @@ module.exports.getRecommendedContent = async (req, res) => {
   
   //Fetch Genres based on user preferences
   const userPref = await UserPref.findOne({ email });
+  if(userPref){
   const userPrefGenres = userPref.preferredGenres;
 
   //Need to implement fetching recommendations based on watchlist. Below hardcoded array will be replaced.
@@ -112,6 +113,8 @@ module.exports.getRecommendedContent = async (req, res) => {
     data: response.data.results
   }
   return res.json(resultData);
+}
+return res.status(400).json({message : "User with given email not found"})
 };
 
 module.exports.getContentNotification = async (req, res) => {
@@ -123,5 +126,5 @@ module.exports.getContentNotification = async (req, res) => {
     urlPrefix: IMG_PATH_PREFIX,
     data: response.data.results
   }
-  return res.json(resultData);
+  return res.status(200).json(resultData);
 };

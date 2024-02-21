@@ -5,9 +5,9 @@ module.exports.fetchWatchList = async (req, res) => {
 
   const user = await User.findOne({ email });
   if (user) {
-    return res.json({ msg: "success", movies: user.watchListMovies });
+    return res.status(200).json({ msg: "success", movies: user.watchListMovies });
   } else {
-    return res.json({ msg: "User with given email not found." });
+    return res.status(400).json({ msg: "User with given email not found." });
   }
 };
 
@@ -32,13 +32,13 @@ module.exports.addWatchList = async (req, res) => {
       );
     } else {
       await existingMovieList.save();
-      return res.json({ msg: "Movie already added to the watch list." });
+      return res.status(200).json({ msg: "Movie already added to the watch list." });
     }
   } else {
     // If email does not exist, create a new movie document
     movie = await User.create({ email, watchlist });
   }
-  return res.json({ msg: "Movie added to the watch list." });
+  return res.status(200).json({ msg: "Movie added to the watch list." });
 };
 
 module.exports.removeWatchList = async (req, res) => {
@@ -58,6 +58,6 @@ module.exports.removeWatchList = async (req, res) => {
       },
       { new: true }
     );
-    return res.json({ msg: "Movie successfully removed from watch list.", movies });
-  } else return res.json({ msg: "User with given email not found." });
+    return res.status(200).json({ msg: "Movie successfully removed from watch list.", movies });
+  } else return res.status(400).json({ msg: "User with given email not found." });
 };
