@@ -1,7 +1,7 @@
 const {
     getGenres, getTrendingMovies, getPopularMovies, fetchDataByGenre, searchMovieorTVShows, getMovieById, getShowById, getMovieReviewsById, getShowReviewsById
   } = require("../controllers/NetflixController");
-  
+const { cacheMiddleware } = require("../middlewares/redisCacheMiddleware");
   
   const authMiddleware=require('../middlewares/authMiddleware')
 
@@ -13,23 +13,23 @@ const {
   });
 
 
-  router.get("/genres",authMiddleware, getGenres);
+  router.get("/genres",cacheMiddleware,authMiddleware, getGenres);
 
-  router.get("/trending/:category/:time_window",authMiddleware, getTrendingMovies);
+  router.get("/trending/:category/:time_window",cacheMiddleware,authMiddleware, getTrendingMovies);
 
-  router.get("/popular",authMiddleware, getPopularMovies);
+  router.get("/popular",cacheMiddleware,authMiddleware, getPopularMovies);
 
-  router.get("/genre/:type",authMiddleware, fetchDataByGenre);
+  router.get("/genre/:type",cacheMiddleware,authMiddleware, fetchDataByGenre);
 
-  router.get("/search",authMiddleware, searchMovieorTVShows);
+  router.get("/search",cacheMiddleware,authMiddleware, searchMovieorTVShows);
 
-  router.get("/movie/:movie_id",authMiddleware, getMovieById);
+  router.get("/movie/:movie_id",cacheMiddleware,authMiddleware, getMovieById);
 
-  router.get("/tvshow/:series_id",authMiddleware, getShowById);
+  router.get("/tvshow/:series_id",cacheMiddleware,authMiddleware, getShowById);
 
-  router.get("/movie/:movie_id/reviews", authMiddleware, getMovieReviewsById);
+  router.get("/movie/:movie_id/reviews",cacheMiddleware, authMiddleware, getMovieReviewsById);
 
-  router.get("/tvshow/:series_id/reviews", authMiddleware, getShowReviewsById);
+  router.get("/tvshow/:series_id/reviews",cacheMiddleware, authMiddleware, getShowReviewsById);
   //router.get("/liked/:email", getLikedMovies);
 //   router.post("/add", addToLikedMovies);
 //   router.put("/remove", removeFromLikedMovies);
