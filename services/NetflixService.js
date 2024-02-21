@@ -17,7 +17,7 @@ module.exports.getGenres = async (req, res) => {
   // Extract data from the response
   const apiData = response.data;
   // Cache data for 1 hour (3600 seconds)
-  redisClient.setex(key, 3600, JSON.stringify(apiData));
+  //redisClient.setex(key, 3600, JSON.stringify(apiData));
   // Send the data as the API response
   res.json(apiData);
 };
@@ -39,7 +39,7 @@ module.exports.getTrendingMovies = async (req, res) => {
     data: apiData
   }
    // Cache data for 1 hour (3600 seconds)
-   redisClient.setex(key, 3600, JSON.stringify(responseData));
+   //redisClient.setex(key, 3600, JSON.stringify(responseData));
   // Send the data as the API response
   res.json(responseData);
 };
@@ -58,7 +58,7 @@ module.exports.getPopularMovies = async (req, res) => {
   // Send the data as the API response
   res.json(responseData);
    // Cache data for 1 hour (3600 seconds)
-  redisClient.setex(key, 3600, JSON.stringify(responseData));
+  //redisClient.setex(key, 3600, JSON.stringify(responseData));
 };
 
 module.exports.fetchDataByGenre = async (req, res) => {
@@ -80,7 +80,7 @@ module.exports.fetchDataByGenre = async (req, res) => {
     data: apiData
   }
    // Cache data for 1 hour (3600 seconds)
-   redisClient.setex(key, 3600, JSON.stringify(responseData));
+   //redisClient.setex(key, 3600, JSON.stringify(responseData));
   // Send the data as the API response
   res.json(responseData);
 };
@@ -96,7 +96,7 @@ module.exports.searchMovieorTVShows = async (req, res) => {
   if (response.data.results.length > 0) {
     const movies = response.data.results;
      // Cache data for 1 hour (3600 seconds)
-    redisClient.setex(req.originalUrl, 3600, JSON.stringify(movies));
+    //redisClient.setex(req.originalUrl, 3600, JSON.stringify(movies));
     // Send the data as the API response
     res.json(movies);
   } else {
@@ -119,7 +119,7 @@ module.exports.getMovieById = async (req, res) => {
     data: apiData
   }
   // Cache data for 1 hour (3600 seconds)
-  redisClient.setex(key, 3600, JSON.stringify(responseData));
+  //redisClient.setex(key, 3600, JSON.stringify(responseData));
   // Send the data as the API response
   res.json(responseData);
 };
@@ -139,7 +139,7 @@ module.exports.getShowById = async (req, res) => {
     data: apiData
   }
   // Cache data for 1 hour (3600 seconds)
-  redisClient.setex(key, 3600, JSON.stringify(responseData));
+  //redisClient.setex(key, 3600, JSON.stringify(responseData));
   // Send the data as the API response
   res.json(responseData);
 };
@@ -158,7 +158,7 @@ module.exports.getMovieReviewsById = async (req, res) => {
     data: apiData
   }
   // Cache data for 1 hour (3600 seconds)
-  redisClient.setex(key, 3600, JSON.stringify(responseData));
+  //redisClient.setex(key, 3600, JSON.stringify(responseData));
   // Send the data as the API response
   res.json(responseData);
 };
@@ -177,7 +177,7 @@ module.exports.getShowReviewsById = async (req, res) => {
     data: apiData
   }
   // Cache data for 1 hour (3600 seconds)
-  redisClient.setex(key, 3600, JSON.stringify(responseData));
+  //redisClient.setex(key, 3600, JSON.stringify(responseData));
   // Send the data as the API response
   res.json(responseData);
 };
