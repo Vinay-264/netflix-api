@@ -12,6 +12,36 @@ const dotenv = require('dotenv');
 dotenv.config({ path: `${__dirname}/config.env` });
 const authRoutes = require('./routes/AuthRoutes');
 
+function handleInvalidJson(err, req, res, next) {
+  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+    return res.status(400).send({ message: 'Invalid JSON' });
+  }
+  next(err);
+}
+
+// Middleware function to handle unauthorized errors
+function handleUnauthorized(err, req, res, next) {
+  if (err.status === 401) {
+    return res.status(401).send({ message: 'Unauthorized' });
+  }
+  next(err);
+}
+
+// Middleware function to handle not found errors
+function handleNotFound(err,req, res, next) {
+  if (err.status === 404) {
+    return res.status(404).send({ message: err.message ? err.message : 'Not Found' });
+  }
+  // const err = new Error('Not Found');
+  // err.status = 404;
+  next(err);
+}
+
+// Middleware function to handle all other errors
+function handleAllOtherErrors(err, req, res, next) {
+  res.status(err.status || 500).send({ message: err.message ? err.message: 'Internal Server Error' });
+}
+
 
 
 if (cluster.isPrimary) {
@@ -35,6 +65,11 @@ if (cluster.isPrimary) {
   app.use(cors());
   // Apply rate limiter to all requests
   app.use(limiter);
+
+  app.use(handleInvalidJson);
+app.use(handleUnauthorized);
+app.use(handleNotFound);
+app.use(handleAllOtherErrors);
 
   db.dbConfig();
 
