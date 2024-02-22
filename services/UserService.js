@@ -102,11 +102,7 @@ module.exports.getRecommendedContent = async (req, res) => {
   const userPref = await UserPref.findOne({ email });
   if (userPref) {
     const userPrefGenres = userPref.preferredGenres;
-
-    //Need to implement fetching recommendations based on watchlist. Below hardcoded array will be replaced.
-    const watchListGenres = [12, 80, 99];
-    const uniqueGenres = [...new Set([...userPrefGenres, ...watchListGenres])];
-    const genres = uniqueGenres.join('%7C');
+    const genres = userPrefGenres.join('%7C');
     const response = await axios.get(`${TMDB_BASE_URL}/discover/${category}?api_key=${API_KEY}&include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&with_genres=${genres}`);
     const resultData = {
       urlPrefix: IMG_PATH_PREFIX,
