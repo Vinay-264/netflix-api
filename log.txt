@@ -256,3 +256,15 @@
 1708495583748:::1 GET: /api/netflix/trending/all/day
 
 1708495593630:::1 GET: /api/netflix/trending/all/day
+
+1708609006593:::1 GET: /api-docs/
+
+1708609006612:::1 GET: /api-docs/swagger-ui.css
+
+1708609006614:::1 GET: /api-docs/swagger-ui-bundle.js
+
+1708609006615:::1 GET: /api-docs/swagger-ui-standalone-preset.js
+
+1708609006634:::1 GET: /api-docs/swagger-ui-init.js
+
+1708609006806:::1 GET: /api-docs/favicon-32x32.png
