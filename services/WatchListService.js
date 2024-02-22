@@ -7,7 +7,7 @@ module.exports.fetchWatchList = async (req, res) => {
   if (user) {
     return res.status(200).json({ msg: "success", movies: user.watchListMovies });
   } else {
-    return res.status(400).json({ msg: "User with given email not found." });
+    return res.status(404).json({ msg: "User with given email not found." });
   }
 };
 
@@ -48,7 +48,7 @@ module.exports.removeWatchList = async (req, res) => {
     const movies = user.watchListMovies;
     const movieIndex = movies.findIndex(({ id }) => id === Number(movieId));
     if (movieIndex) {
-      return res.status(400).send({ msg: "Movie not found." });
+      return res.status(404).send({ msg: "Movie not found." });
     }
     movies.splice(movieIndex, 1);
     await User.findByIdAndUpdate(
@@ -59,5 +59,5 @@ module.exports.removeWatchList = async (req, res) => {
       { new: true }
     );
     return res.status(200).json({ msg: "Movie successfully removed from watch list.", movies });
-  } else return res.status(400).json({ msg: "User with given email not found." });
+  } else return res.status(404).json({ msg: "User with given email not found." });
 };

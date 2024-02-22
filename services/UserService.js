@@ -15,7 +15,7 @@ module.exports.fetchLikedMovies = async (req, res) => {
   if (user) {
     return res.status(200).json({ msg: "success", movies: user.likedMovies });
   } else {
-    return res.status(400).json({ msg: "User with given email not found." });
+    return res.status(404).json({ msg: "User with given email not found." });
   }
 };
 
@@ -56,7 +56,7 @@ module.exports.removedLikedMovies = async (req, res) => {
     const movies = user.likedMovies;
     const movieIndex = movies.findIndex(({ id }) => id === Number(movieId));
     if (movieIndex) {
-      return res.status(400).send({ msg: "Movie not found." });
+      return res.status(404).send({ msg: "Movie not found." });
     }
     movies.splice(movieIndex, 1);
     await User.findByIdAndUpdate(
@@ -67,7 +67,7 @@ module.exports.removedLikedMovies = async (req, res) => {
       { new: true }
     );
     return res.status(200).json({ msg: "Movie successfully removed.", movies });
-  } else return res.status(400).json({ msg: "User with given email not found." });
+  } else return res.status(404).json({ msg: "User with given email not found." });
 };
 
 module.exports.getUserPreferences = async (req, res) => {
@@ -77,50 +77,50 @@ module.exports.getUserPreferences = async (req, res) => {
   if (userPref) {
     return res.status(200).json({ msg: "success", genres: userPref.preferredGenres });
   } else {
-    return res.status(400).json({ msg: "User with given email not found." });
+    return res.status(404).json({ msg: "User with given email not found." });
   }
 };
 
 module.exports.saveUserPreferences = async (req, res) => {
   const userPrefData = req.body;
   const userPref = new UserPref(userPrefData);
-  await userPref.save();  
+  await userPref.save();
   return res.status(200).json({ msg: "Genre added to the preferred list." });
 };
 
 module.exports.modifyUserPreferences = async (req, res) => {
   const email = req.params.email;
   const newPref = req.body.preferredGenres;
-  await UserPref.findOneAndUpdate({ email }, { $set: { preferredGenres: newPref } }) 
+  await UserPref.findOneAndUpdate({ email }, { $set: { preferredGenres: newPref } })
   return res.status(200).json({ msg: "Genre updated in the user preferred list." });
 };
 
 module.exports.getRecommendedContent = async (req, res) => {
   const { email, category } = req.params;
-  
+
   //Fetch Genres based on user preferences
   const userPref = await UserPref.findOne({ email });
-  if(userPref){
-  const userPrefGenres = userPref.preferredGenres;
+  if (userPref) {
+    const userPrefGenres = userPref.preferredGenres;
 
-  //Need to implement fetching recommendations based on watchlist. Below hardcoded array will be replaced.
-  const watchListGenres = [12, 80, 99];
-  const uniqueGenres = [...new Set([...userPrefGenres, ...watchListGenres]) ];
-  const genres = uniqueGenres.join('%7C');
-  const response = await axios.get(`${TMDB_BASE_URL}/discover/${category}?api_key=${API_KEY}&include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&with_genres=${genres}`);
-  const resultData = {
-    urlPrefix: IMG_PATH_PREFIX,
-    data: response.data.results
+    //Need to implement fetching recommendations based on watchlist. Below hardcoded array will be replaced.
+    const watchListGenres = [12, 80, 99];
+    const uniqueGenres = [...new Set([...userPrefGenres, ...watchListGenres])];
+    const genres = uniqueGenres.join('%7C');
+    const response = await axios.get(`${TMDB_BASE_URL}/discover/${category}?api_key=${API_KEY}&include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&with_genres=${genres}`);
+    const resultData = {
+      urlPrefix: IMG_PATH_PREFIX,
+      data: response.data.results
+    }
+    return res.json(resultData);
   }
-  return res.json(resultData);
-}
-return res.status(400).json({message : "User with given email not found"})
+  return res.status(404).json({ message: "User with given email not found" })
 };
 
 module.exports.getContentNotification = async (req, res) => {
   const { category } = req.params;
   const today = new Date();
-  const fromDate = today.setDate(today.getDate() - 7);  
+  const fromDate = today.setDate(today.getDate() - 7);
   const response = await axios.get(`${TMDB_BASE_URL}/discover/${category}?api_key=${API_KEY}&include_adult=false&release_date.gte=${fromDate}&sort_by=popularity.desc`);
   const resultData = {
     urlPrefix: IMG_PATH_PREFIX,

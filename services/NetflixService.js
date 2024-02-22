@@ -13,7 +13,7 @@ module.exports.getGenres = async (req, res) => {
   const key = req.originalUrl;
   // Make a GET request to a third-party API
   const response = await axios.get(`${TMDB_BASE_URL}/genre/movie/list?api_key=${API_KEY}`);
-        
+
   // Extract data from the response
   const apiData = response.data;
   // Cache data for 1 hour (3600 seconds)
@@ -38,8 +38,8 @@ module.exports.getTrendingMovies = async (req, res) => {
     urlPrefix: IMG_PATH_PREFIX,
     data: apiData
   }
-   // Cache data for 1 hour (3600 seconds)
-   //redisClient.setex(key, 3600, JSON.stringify(responseData));
+  // Cache data for 1 hour (3600 seconds)
+  //redisClient.setex(key, 3600, JSON.stringify(responseData));
   // Send the data as the API response
   res.json(responseData);
 };
@@ -57,7 +57,7 @@ module.exports.getPopularMovies = async (req, res) => {
   }
   // Send the data as the API response
   res.json(responseData);
-   // Cache data for 1 hour (3600 seconds)
+  // Cache data for 1 hour (3600 seconds)
   //redisClient.setex(key, 3600, JSON.stringify(responseData));
 };
 
@@ -79,8 +79,8 @@ module.exports.fetchDataByGenre = async (req, res) => {
     urlPrefix: IMG_PATH_PREFIX,
     data: apiData
   }
-   // Cache data for 1 hour (3600 seconds)
-   //redisClient.setex(key, 3600, JSON.stringify(responseData));
+  // Cache data for 1 hour (3600 seconds)
+  //redisClient.setex(key, 3600, JSON.stringify(responseData));
   // Send the data as the API response
   res.json(responseData);
 };
@@ -95,7 +95,7 @@ module.exports.searchMovieorTVShows = async (req, res) => {
   // Extract data from the response
   if (response.data.results.length > 0) {
     const movies = response.data.results;
-     // Cache data for 1 hour (3600 seconds)
+    // Cache data for 1 hour (3600 seconds)
     //redisClient.setex(req.originalUrl, 3600, JSON.stringify(movies));
     // Send the data as the API response
     res.json(movies);
