@@ -14,6 +14,9 @@ const dotenv = require('dotenv');
 dotenv.config({ path: `${__dirname}/config.env` });
 const authRoutes = require('./routes/AuthRoutes');
 const PORT = process.env.PORT || 5000;
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./swagger.yaml');
 
 const app = express();
 
@@ -52,7 +55,7 @@ if (cluster.isPrimary) {
   
   //Error(invalid Json(400), Not Found(404), Internal Server error(500) ) Handling Middlware
   app.use(handleErrors);
-
+  app.use('/netflix-api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
   app.listen(PORT, () => {
     console.log(`server started on port ${PORT}`);
