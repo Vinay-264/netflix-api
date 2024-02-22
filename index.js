@@ -6,7 +6,7 @@ const status = require("express-status-monitor");
 const netflixRoutes = require("./routes/NetflixRoutes");
 const userRoutes = require("./routes/UserRoutes");
 const { logReqRes } = require("./middlewares/log");
-const { handleInvalidJson, handleUnauthorized, handleNotFound, handleAllOtherErrors } = require("./middlewares/errorhandlingMiddleware");
+const { handleErrors } = require("./middlewares/errorhandlingMiddleware");
 const { limiter } = require("./services/RateLimit");
 const watchListRoutes = require("./routes/WatchListRoutes");
 const { dbConfig } = require("./utils/db");
@@ -44,15 +44,14 @@ if (cluster.isPrimary) {
   // logging APi call in log.txt file
   app.use(logReqRes());
 
+  //Routes
   app.use("/api/netflix", netflixRoutes);
   app.use("/api/user", userRoutes);
   app.use('/api/auth', authRoutes);
-
   app.use("/api/watchList", watchListRoutes);
-  app.use(handleInvalidJson);
-  app.use(handleUnauthorized);
-  app.use(handleNotFound);
-  app.use(handleAllOtherErrors);
+  
+  //Error(invalid Json(400), Not Found(404), Internal Server error(500) ) Handling Middlware
+  app.use(handleErrors);
 
 
   app.listen(PORT, () => {

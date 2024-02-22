@@ -16,7 +16,6 @@ const authenticateUser = async (req, res, next) => {
     }
   } catch (error) {
     // Error occurred while verifying authentication status, send detailed error response
-    console.error('Error authenticating user:', error);
     res.status(500).json({ message: 'Internal Server Error', error: error.message });
   }
 };
