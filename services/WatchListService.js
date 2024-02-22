@@ -16,22 +16,22 @@ module.exports.addWatchList = async (req, res) => {
   // {"email": "xyz8998@gmail.com","watchlist": {"id": 2,"genres":["comedy"],
   //"name":"xxxxxxx"}}
   const { email, watchlist } = req.body;
-  const existingMovieList = await User.findOne({ email });
+  const existingWatchList = await User.findOne({ email });
 
-  if (existingMovieList) {
+  if (existingWatchList) {
     // If email exists, append watch list Movies
-    const { watchListMovies } = existingMovieList;
-    const movieAlreadyWatchlist = watchListMovies.find(({ id }) => id === watchlist.id);
-    if (!movieAlreadyWatchlist) {
+    const { watchListMovies } = existingWatchList;
+    const movieAlreadyInWatchlist = watchListMovies.find(({ id }) => id === watchlist.id);
+    if (!movieAlreadyInWatchlist) {
       await User.findByIdAndUpdate(
-        existingMovieList._id,
+        existingWatchList._id,
         {
-            watchListMovies: [...existingMovieList.watchListMovies, watchlist],
+            watchListMovies: [...existingWatchList.watchListMovies, watchlist],
         },
         { new: true }
       );
     } else {
-      await existingMovieList.save();
+      await existingWatchList.save();
       return res.status(200).json({ msg: "Movie already added to the watch list." });
     }
   } else {
