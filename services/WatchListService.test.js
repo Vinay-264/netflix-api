@@ -20,7 +20,8 @@ describe("fetchWatchList function", () => {
 
         const req = { params: emailId };
         const res = {
-            json: jest.fn(),
+            status:jest.fn().mockReturnThis(),
+            json: jest.fn()
         };
 
         Users.findOne = jest.fn().mockReturnValue(mockUserData);
@@ -42,7 +43,8 @@ describe("fetchWatchList function", () => {
 
         const req = { params: emailId };
         const res = {
-            json: jest.fn(),
+            status:jest.fn().mockReturnThis(),
+            json: jest.fn()
         };
 
         Users.findOne = jest.fn().mockReturnValue();
@@ -82,7 +84,8 @@ describe("addWatchList function", () => {
 
         const req = { body: { email: emailId, watchlist: mockUserRequest } };
         const res = {
-            json: jest.fn(),
+            status:jest.fn().mockReturnThis(),
+            json: jest.fn()
         };
 
         const likedMovies = await Users.findOne(emailId);
@@ -123,7 +126,8 @@ describe("removeWatchList function", () => {
 
         const req = { body: { email: emailId, movieId: 1 } };
         const res = {
-            json: jest.fn(),
+            status:jest.fn().mockReturnThis(),
+            json: jest.fn()
         };
 
         const likedMovies = await Users.findOne(emailId);

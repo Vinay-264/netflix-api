@@ -41,7 +41,9 @@ describe("fetchLikedMovies function", () => {
 
         const req = { params: emailId };
         const res = {
-            json: jest.fn(),
+            status:jest.fn().mockReturnThis(),
+            json: jest.fn()
+            
         };
 
         Users.findOne = jest.fn().mockReturnValue(mockUserData);
@@ -63,7 +65,8 @@ describe("fetchLikedMovies function", () => {
 
         const req = { params: emailId };
         const res = {
-            json: jest.fn(),
+            status:jest.fn().mockReturnThis(),
+            json: jest.fn()
         };
 
         // Users.mockImplementationOnce(() => ({
@@ -106,7 +109,8 @@ describe("addToLikedMovies function", () => {
 
         const req = { body: { email: emailId, data: mockUserRequest } };
         const res = {
-            json: jest.fn(),
+            status:jest.fn().mockReturnThis(),
+            json: jest.fn()
         };
 
         const likedMovies = await Users.findOne(emailId);
@@ -147,7 +151,8 @@ describe("removedLikedMovies function", () => {
 
         const req = { body: { email: emailId, movieId: 1 } };
         const res = {
-            json: jest.fn(),
+            status:jest.fn().mockReturnThis(),
+            json: jest.fn()
         };
 
         const likedMovies = await Users.findOne(emailId);
@@ -177,7 +182,8 @@ describe("getUserPreferences function", () => {
 
         const req = { params: emailId };
         const res = {
-            json: jest.fn(),
+            status:jest.fn().mockReturnThis(),
+            json: jest.fn()
         };
 
         UserPref.findOne = jest.fn().mockReturnValue(mockUserData);
@@ -206,7 +212,8 @@ describe("saveUserPreferences function", () => {
         };
 
         const res = {
-            json: jest.fn(),
+            status:jest.fn().mockReturnThis(),
+            json: jest.fn()
         };
 
         UserPref.Save = jest.fn().mockReturnValue();
@@ -223,7 +230,8 @@ describe("modifyUserPreferences function", () => {
 
         const req = { params: { email: 'movie@gmail.com' }, body: { preferredGenres: [1] } };
         const res = {
-            json: jest.fn(),
+            status:jest.fn().mockReturnThis(),
+            json: jest.fn()
         };
 
         UserPref.findOneAndUpdate = jest.fn().mockReturnValue();
@@ -244,7 +252,8 @@ describe("getContentNotification function", () => {
 
         const req = { params: { category: 'Adventure' } };
         const res = {
-            json: jest.fn(),
+            status:jest.fn().mockReturnThis(),
+            json: jest.fn()
         };
         const result = await getContentNotification(req, res);
 
