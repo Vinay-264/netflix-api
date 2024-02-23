@@ -89,12 +89,8 @@ describe("addWatchList function", () => {
         };
 
         const likedMovies = await Users.findOne(emailId);
-        //const {likedMovies} = existingMovies;
-        //test.find=jest.fn();
         Users.findByIdAndUpdate = jest.fn().mockResolvedValue(mockUserData);
         await addWatchList(req, res);
-
-
         // Assert
         expect(res.json.mock.calls[0][0].msg).toEqual('Movie added to the watch list.');
     });
