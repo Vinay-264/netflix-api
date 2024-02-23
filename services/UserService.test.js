@@ -50,7 +50,6 @@ describe("fetchLikedMovies function", () => {
 
         const result = await fetchLikedMovies(req, res);
 
-
         // Assert
         expect(res.json.mock.calls[0][0].msg).toEqual('success');
     });
@@ -68,14 +67,9 @@ describe("fetchLikedMovies function", () => {
             status:jest.fn().mockReturnThis(),
             json: jest.fn()
         };
-
-        // Users.mockImplementationOnce(() => ({
-        //     findOne: jest.fn().mockRejectedValue(),
-        //   }));
         Users.findOne = jest.fn().mockReturnValue();
 
         const result = await fetchLikedMovies(req, res);
-
 
         // Assert
         expect(res.json.mock.calls[0][0].msg).toEqual('User with given email not found.');
@@ -114,11 +108,8 @@ describe("addToLikedMovies function", () => {
         };
 
         const likedMovies = await Users.findOne(emailId);
-        //const {likedMovies} = existingMovies;
-        //test.find=jest.fn();
         Users.findByIdAndUpdate = jest.fn().mockResolvedValue(mockUserData);
         await addToLikedMovies(req, res);
-
 
         // Assert
         expect(res.json.mock.calls[0][0].msg).toEqual('Movie added to the liked list.');
@@ -159,7 +150,6 @@ describe("removedLikedMovies function", () => {
         Users.findByIdAndUpdate = jest.fn().mockResolvedValue(mockUserData);
         await removedLikedMovies(req, res);
 
-
         // Assert
         expect(res.json.mock.calls[0][0].msg).toEqual('User with given email not found.');
     });
@@ -189,13 +179,9 @@ describe("getUserPreferences function", () => {
         UserPref.findOne = jest.fn().mockReturnValue(mockUserData);
 
         const result = await getUserPreferences(req, res);
-
-
         // Assert
         expect(res.json.mock.calls[0][0].msg).toEqual('success');
     });
-
-
 
 });
 
@@ -218,8 +204,6 @@ describe("saveUserPreferences function", () => {
 
         UserPref.Save = jest.fn().mockReturnValue();
         const result = await saveUserPreferences(req, res);
-
-
         // Assert
         expect(res.json.mock.calls[0][0].msg).toEqual('Genre added to the preferred list.');
     });
@@ -237,13 +221,9 @@ describe("modifyUserPreferences function", () => {
         UserPref.findOneAndUpdate = jest.fn().mockReturnValue();
 
         const result = await modifyUserPreferences(req, res);
-
         // Assert
         expect(res.json.mock.calls[0][0].msg).toEqual('Genre updated in the user preferred list.');
     });
-
-
-
 });
 
 describe("getContentNotification function", () => {
@@ -256,7 +236,6 @@ describe("getContentNotification function", () => {
             json: jest.fn()
         };
         const result = await getContentNotification(req, res);
-
         // Call the Axios method in your test
         expect(axios.create).toHaveBeenCalledWith({ httpsAgent: expect.any(Object) });
     });
