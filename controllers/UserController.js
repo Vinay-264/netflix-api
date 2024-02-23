@@ -31,7 +31,7 @@ module.exports.removeFromLikedMovies = async (req, res) => {
   try {
     await removedLikedMovies(req, res);
   } catch (error) {
-    return res.json({ msg: "Error removing movie to the liked list" });
+    return res.json({ msg: "Error removing movie from the liked list" });
   }
 };
 

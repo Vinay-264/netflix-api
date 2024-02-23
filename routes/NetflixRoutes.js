@@ -1,7 +1,7 @@
 const {
     getGenres, getTrendingMovies, getPopularMovies, fetchDataByGenre, searchMovieorTVShows, getMovieById, getShowById, getMovieReviewsById, getShowReviewsById
   } = require("../controllers/NetflixController");
-  
+const { cacheMiddleware } = require("../middlewares/redisCacheMiddleware");
   
   const authMiddleware=require('../middlewares/authMiddleware')
 
@@ -30,14 +30,6 @@ const {
   router.get("/movie/:movie_id/reviews", authMiddleware, getMovieReviewsById);
 
   router.get("/tvshow/:series_id/reviews", authMiddleware, getShowReviewsById);
-  //router.get("/liked/:email", getLikedMovies);
-//   router.post("/add", addToLikedMovies);
-//   router.put("/remove", removeFromLikedMovies);
-  
-  
-//   router.post("/create-user", createUser);
-  
-//   router.post("/login-user", loginUser);
   
   module.exports = router;
   

@@ -3,10 +3,10 @@ const firebaseAdmin = require('../utils/firebaseAdmin');
 
 const registerUser = async (email, password) => {
   try {
-    const userRecord = await firebaseAdmin.auth().createUser({
+     await firebaseAdmin.auth().createUser({
       email: email,
       password: password,
-      
+
     });
     return 'Registration successful';
   } catch (error) {

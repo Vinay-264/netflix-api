@@ -5,9 +5,9 @@ module.exports.fetchWatchList = async (req, res) => {
 
   const user = await User.findOne({ email });
   if (user) {
-    return res.json({ msg: "success", movies: user.watchListMovies });
+    return res.status(200).json({ msg: "success", movies: user.watchListMovies });
   } else {
-    return res.json({ msg: "User with given email not found." });
+    return res.status(404).json({ msg: "User with given email not found." });
   }
 };
 
@@ -16,29 +16,29 @@ module.exports.addWatchList = async (req, res) => {
   // {"email": "xyz8998@gmail.com","watchlist": {"id": 2,"genres":["comedy"],
   //"name":"xxxxxxx"}}
   const { email, watchlist } = req.body;
-  const existingMovieList = await User.findOne({ email });
+  const existingWatchList = await User.findOne({ email });
 
-  if (existingMovieList) {
+  if (existingWatchList) {
     // If email exists, append watch list Movies
-    const { watchListMovies } = existingMovieList;
-    const movieAlreadyWatchlist = watchListMovies.find(({ id }) => id === watchlist.id);
-    if (!movieAlreadyWatchlist) {
+    const { watchListMovies } = existingWatchList;
+    const movieAlreadyInWatchlist = watchListMovies.find(({ id }) => id === watchlist.id);
+    if (!movieAlreadyInWatchlist) {
       await User.findByIdAndUpdate(
-        existingMovieList._id,
+        existingWatchList._id,
         {
-            watchListMovies: [...existingMovieList.watchListMovies, watchlist],
+            watchListMovies: [...existingWatchList.watchListMovies, watchlist],
         },
         { new: true }
       );
     } else {
-      await existingMovieList.save();
-      return res.json({ msg: "Movie already added to the watch list." });
+      await existingWatchList.save();
+      return res.status(200).json({ msg: "Movie already added to the watch list." });
     }
   } else {
     // If email does not exist, create a new movie document
     movie = await User.create({ email, watchlist });
   }
-  return res.json({ msg: "Movie added to the watch list." });
+  return res.status(200).json({ msg: "Movie added to the watch list." });
 };
 
 module.exports.removeWatchList = async (req, res) => {
@@ -48,7 +48,7 @@ module.exports.removeWatchList = async (req, res) => {
     const movies = user.watchListMovies;
     const movieIndex = movies.findIndex(({ id }) => id === Number(movieId));
     if (movieIndex) {
-      return res.status(400).send({ msg: "Movie not found." });
+      return res.status(404).send({ msg: "Movie not found." });
     }
     movies.splice(movieIndex, 1);
     await User.findByIdAndUpdate(
@@ -58,6 +58,6 @@ module.exports.removeWatchList = async (req, res) => {
       },
       { new: true }
     );
-    return res.json({ msg: "Movie successfully removed from watch list.", movies });
-  } else return res.json({ msg: "User with given email not found." });
+    return res.status(200).json({ msg: "Movie successfully removed from watch list.", movies });
+  } else return res.status(404).json({ msg: "User with given email not found." });
 };

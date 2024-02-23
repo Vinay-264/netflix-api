@@ -1,0 +1,385 @@
+swagger: '2.0'
+info:
+  title: Netflix API
+  description: API for accessing Netflix-like data, including genres, trending and popular movies, specific movie or show information, and reviews.
+  version: '1.0.0'
+host: 'localhost:5000'
+basePath: '/'
+schemes:
+  - http
+
+securityDefinitions:
+  FirebaseAuth:
+    type: apiKey
+    in: header
+    name: Authorization
+    description: "Firebase Auth JWT token passed as a Bearer token in the Authorization header. Format: 'Bearer {token}'"
+ 
+security:
+  - FirebaseAuth: []
+
+paths:
+  /api/auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Register a new user
+      description: Registers a new user with email and password, returning a Firebase JWT.
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+      responses:
+        200:
+          description: User registered successfully
+  /api/auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login a user
+      description: Logs in a user with email and password, returning a Firebase JWT.
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+      responses:
+        200:
+          description: User logged in successfully
+  /api/netflix/genres:
+    get:
+      tags:
+        - Netflix
+      summary: Get list of genres
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Genre'
+  /api/netflix/trending:
+    get:
+      tags:
+        - Netflix
+      summary: Get trending movies
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Movie'
+  /api/netflix/popular:
+    get:
+      tags:
+        - Netflix
+      summary: Get popular movies
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Movie'
+  /api/netflix/movies/genre/{genreId}:
+    get:
+      tags:
+        - Netflix
+      summary: Get movies by genre
+      parameters:
+        - name: genreId
+          in: path
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Movie'
+  /api/netflix/search:
+    get:
+      tags:
+        - Netflix
+      summary: Search movies or TV shows
+      parameters:
+        - name: query
+          in: query
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Movie'
+  /api/netflix/movie/{movieId}:
+    get:
+      tags:
+        - Netflix
+      summary: Get movie by ID
+      parameters:
+        - name: movieId
+          in: path
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Movie'
+  /api/netflix/show/{showId}:
+    get:
+      tags:
+        - Netflix
+      summary: Get TV show by ID
+      parameters:
+        - name: showId
+          in: path
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Show'
+  /api/netflix/movie/{movieId}/reviews:
+    get:
+      tags:
+        - Netflix
+      summary: Get movie reviews by ID
+      parameters:
+        - name: movieId
+          in: path
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Review'
+  /api/netflix/show/{showId}/reviews:
+    get:
+      tags:
+        - Netflix
+      summary: Get TV show reviews by ID
+      parameters:
+        - name: showId
+          in: path
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Review'
+  /api/watchlist:
+    get:
+      tags:
+        - Watchlist
+      summary: Retrieve a user's watchlist
+      description: Fetches the list of movies in the user's watchlist.
+      responses:
+        200:
+          description: Watchlist fetched successfully
+        500:
+          description: Error fetching the watchlist
+
+  /api/watchlist/add:
+    post:
+      tags:
+        - Watchlist
+      summary: Add a movie to the watchlist
+      description: Adds a specified movie to the user's watchlist.
+      parameters:
+        - in: body
+          name: movie
+          description: Movie to add to the watchlist
+          required: true
+          schema:
+            type: object
+            properties:
+              movieId:
+                type: string
+      responses:
+        200:
+          description: Movie added successfully
+        500:
+          description: Error adding the movie
+
+  /api/watchlist/remove:
+    delete:
+      tags:
+        - Watchlist
+      summary: Remove a movie from the watchlist
+      description: Removes a specified movie from the user's watchlist.
+      parameters:
+        - in: body
+          name: movie
+          description: Movie to remove from the watchlist
+          required: true
+          schema:
+            type: object
+            properties:
+              movieId:
+                type: string
+      responses:
+        200:
+          description: Movie removed successfully
+        500:
+          description: Error removing the movie
+
+
+  /api/user/liked-movies:
+    get:
+      tags:
+        - User
+      summary: Get liked movies
+      description: Fetches a list of movies liked by the user.
+      responses:
+        200:
+          description: Successfully fetched liked movies
+
+  /api/user/liked-movies/add:
+    post:
+      tags:
+        - User
+      summary: Add a movie to liked list
+      description: Adds a specified movie to the user's liked movies list.
+      parameters:
+        - in: body
+          name: movie
+          description: Movie to be added
+          required: true
+          schema:
+            type: object
+            properties:
+              movieId:
+                type: string
+      responses:
+        200:
+          description: Movie added to liked list successfully
+
+  /api/user/liked-movies/remove:
+    post:
+      tags:
+        - User
+      summary: Remove a movie from liked list
+      description: Removes a specified movie from the user's liked movies list.
+      parameters:
+        - in: body
+          name: movie
+          description: Movie to be removed
+          required: true
+          schema:
+            type: object
+            properties:
+              movieId:
+                type: string
+      responses:
+        200:
+          description: Movie removed from liked list successfully
+
+  /api/user/preferences:
+    get:
+      tags:
+        - User
+      summary: Get user preferences
+      description: Fetches the user's genre preferences.
+      responses:
+        200:
+          description: Successfully fetched user preferences
+
+  /api/user/preferences/save:
+    post:
+      tags:
+        - User
+      summary: Save user preferences
+      description: Saves the user's genre preferences.
+      parameters:
+        - in: body
+          name: preferences
+          description: User's genre preferences to save
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        200:
+          description: Preferences saved successfully
+
+  /api/user/recommendations:
+    get:
+      tags:
+        - User
+      summary: Get content recommendations
+      description: Fetches content recommendations based on the user's preferences.
+      responses:
+        200:
+          description: Successfully fetched recommendations
+definitions:
+  Genre:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+  Movie:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      image:
+        type: string
+      genres:
+        type: array
+        items:
+          type: string
+  Show:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      image:
+        type: string
+      genres:
+        type: array
+        items:
+          type: string
+  Review:
+    type: object
+    properties:
+      id:
+        type: integer
+      author:
+        type: string
+      content:
+        type: string
